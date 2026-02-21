@@ -12,7 +12,8 @@
 body {
   margin: 0;
   height: 100vh;
-  background: linear-gradient(135deg, #ffe6f0, #fff5fa);
+  background: radial-gradient(circle at top,
+  #8e2aa8, #fff5fa);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -227,6 +228,30 @@ button {
   100% {
     opacity: 0;
     transform: translate(-50%, -120%) scale(1.4);
+  }
+}
+  /* ===== FLOATING CARD EFFECT ===== */
+@keyframes floatCard {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Apply floating only to visible screens */
+.screen.active {
+  animation: floatCard 6s ease-in-out infinite;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .screen.active {
+    animation: none;
   }
 }
 </style>
