@@ -24,14 +24,27 @@ body {
 }
 
 /* ===== CARD ===== */
+/* ===== CARD (DREAMY MATCHING STYLE) ===== */
 .screen {
-  background: white;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 120, 200, 0.18),
+    rgba(30, 0, 40, 0.55)
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
   width: 80%;
   max-width: 320px;
   padding: 26px 22px 30px;
   border-radius: 28px;
   text-align: center;
-  box-shadow: 0 12px 32px rgba(255,182,193,0.45);
+
+  border: 1px solid rgba(255, 150, 220, 0.25);
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.45),
+    inset 0 0 30px rgba(255,120,200,0.15);
+
   display: none;
   overflow: hidden;
 }
@@ -39,12 +52,12 @@ body {
 
 /* ===== TEXT ===== */
 h1 {
-  color: #ff69b4;
+  color: #ff9ad5;
   margin: 14px 0 6px;
   font-size: 26px;
 }
 p {
-  color: #777;
+  color: rgba(255,255,255,0.75);
   font-size: 14px;
   margin: 0;
 }
@@ -90,9 +103,13 @@ button {
 
 /* ===== CAKE SCREEN ===== */
 .screen.cake-screen {
-  background: linear-gradient(135deg, #6fa8ff, #4d7cff);
+  background: linear-gradient(
+    180deg,
+    rgba(140, 80, 255, 0.25),
+    rgba(40, 0, 60, 0.7)
+  );
   min-height: 360px;
-  color: white;
+  color: #ffffff;
 }
 
 .cake-wrapper {
