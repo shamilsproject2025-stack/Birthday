@@ -417,6 +417,46 @@ button {
     0 0 25px rgba(255,140,200,0.35),
     inset 0 0 20px rgba(255,120,200,0.15);
 }
+/* ===== IMAGE LIGHTBOX ===== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  animation: zoomIn 0.4s ease;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 34px;
+  color: white;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 </style>
 </head>
 
@@ -560,7 +600,11 @@ box-shadow: 0 6px 18px rgba(0,0,0,0.35);
 ">
 🤍 Memories
 </button>
-
+<!-- IMAGE LIGHTBOX -->
+<div id="lightbox" class="lightbox">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img" src="">
+</div>
 <script>
   function switchScreen(from, to) {
   from.classList.add("fade-out");
@@ -777,6 +821,28 @@ document.querySelectorAll(".gallery-item").forEach(item => {
   item.addEventListener("click", () => {
     item.classList.toggle("revealed");
   });
+});
+/* ===== LIGHTBOX LOGIC ===== */
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+const lightboxClose = document.querySelector(".lightbox-close");
+
+document.querySelectorAll(".gallery-item img").forEach(img => {
+  img.addEventListener("click", (e) => {
+    e.stopPropagation(); // prevents tap effects
+    lightboxImg.src = img.src;
+    lightbox.style.display = "flex";
+  });
+});
+
+lightboxClose.addEventListener("click", () => {
+  lightbox.style.display = "none";
+});
+
+lightbox.addEventListener("click", (e) => {
+  if (e.target === lightbox) {
+    lightbox.style.display = "none";
+  }
 });
 </script>
 
