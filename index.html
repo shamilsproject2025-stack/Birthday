@@ -327,6 +327,20 @@ button {
   opacity: 1;
   transform: translateY(0);
 }
+  /* ===== FADE TRANSITION LAYER ===== */
+.screen {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.screen.fade-out {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.screen.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
 </style>
 </head>
 
@@ -409,15 +423,26 @@ box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 </button>
 
 <script>
+  function switchScreen(from, to) {
+  from.classList.add("fade-out");
+
+  setTimeout(() => {
+    from.classList.remove("active", "fade-out");
+    to.classList.add("active", "fade-in");
+
+    setTimeout(() => {
+      to.classList.remove("fade-in");
+    }, 500);
+
+  }, 500); // must match CSS duration
+  }
 function goToBirthday() {
-  screen1.classList.remove("active");
-  screen2.classList.add("active");
+  switchScreen(screen1, screen2);
   startHearts();
 }
 function goToCake() {
   stopHearts();
-  screen2.classList.remove("active");
-  screen3.classList.add("active");
+  switchScreen(screen2, screen3);
 }
 
 /* ===== MIC ===== */
@@ -501,8 +526,7 @@ const bgMusic = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
 
 function showFinalSurprise() {
-  screen3.classList.remove("active");
-  finalScreen.classList.add("active");
+ switchScreen(screen3, finalScreen); 
 
   
   musicBtn.style.display = "flex";
