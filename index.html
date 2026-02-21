@@ -257,12 +257,13 @@ function goToCake() {
 }
 
 /* ===== MIC ===== */
-let audioContext, analyser, mic;
+let audioContext, analyser, mic, micStream;
 
 function startMic() {
   statusText.innerText = "Listening... blow now 💨";
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    micStream = stream;
     audioContext = new AudioContext();
     analyser = audioContext.createAnalyser();
     mic = audioContext.createMediaStreamSource(stream);
@@ -282,8 +283,25 @@ function startMic() {
 }
 
 function blowOut() {
+  // Turn off flames
   document.querySelectorAll(".flame").forEach(f => f.classList.add("off"));
   statusText.innerText = "Yay! 🎉";
+
+  // 🔇 STOP MICROPHONE COMPLETELY
+  if (micStream) {
+    micStream.getTracks().forEach(track => track.stop());
+    micStream = null;
+  }
+
+  if (audioContext) {
+    audioContext.close();
+    audioContext = null;
+  }
+
+  // 🎵 START MUSIC IMMEDIATELY
+  bgMusic.volume = 0.25;
+  bgMusic.play().catch(()=>{});
+
   setTimeout(showFinalSurprise, 1500);
 }
 
