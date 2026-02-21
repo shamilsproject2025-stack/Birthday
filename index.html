@@ -149,7 +149,7 @@ button {
 }
 .flame.off { animation:none; opacity:0; }
 
-/* ===== SLIDESHOW (FIXED) ===== */
+/* ===== SLIDESHOW ===== */
 .slideshow {
   width: 240px;
   height: 320px;
@@ -174,9 +174,11 @@ button {
 </head>
 
 <body>
+
 <audio id="bgMusic" loop>
   <source src="music/birthday.mp3" type="audio/mpeg">
 </audio>
+
 <!-- SCREEN 1 -->
 <div class="screen active" id="screen1">
   <div class="doodle">🧸🎈</div>
@@ -221,25 +223,31 @@ button {
 
   <p class="final-text">Thank you for being mine 💗</p>
 </div>
+
+<!-- MUSIC BUTTON (HIDDEN INITIALLY) -->
 <button id="musicBtn" onclick="toggleMusic()"
 style="
 position: fixed;
 top: 16px;
 right: 16px;
 z-index: 999;
-background: #ff8acb;
+background: linear-gradient(135deg, #ff8acb, #ff6fb1);
 color: white;
 border: none;
-border-radius: 50%;
-width: 46px;
-height: 46px;
-font-size: 20px;
+border-radius: 22px;
+padding: 8px 14px;
+font-size: 13px;
+font-family: 'Baloo 2', cursive;
+display: none;
+align-items: center;
+gap: 6px;
+box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 ">
-🔊
+🔊 Tap for music
 </button>
+
 <script>
 function goToBirthday() {
-  startMusicOnce();
   screen1.classList.remove("active");
   screen2.classList.add("active");
 }
@@ -279,7 +287,7 @@ function blowOut() {
   setTimeout(showFinalSurprise, 1500);
 }
 
-/* ===== SLIDESHOW LOGIC ===== */
+/* ===== SLIDESHOW ===== */
 const images = [
   "images/pic1.jpg",
   "images/pic2.jpg",
@@ -301,21 +309,19 @@ function startSlideshow() {
   }, 2500);
 }
 
-function showFinalSurprise() {
-  screen3.classList.remove("active");
-  finalScreen.classList.add("active");
-  startSlideshow();
-}
-let musicStarted = false;
+/* ===== MUSIC ===== */
 const bgMusic = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
 
-function startMusicOnce() {
-  if (!musicStarted) {
-    bgMusic.volume = 0.4;
-    bgMusic.play().catch(()=>{});
-    musicStarted = true;
-  }
+function showFinalSurprise() {
+  screen3.classList.remove("active");
+  finalScreen.classList.add("active");
+
+  bgMusic.volume = 0.25;
+  bgMusic.play().catch(()=>{});
+  musicBtn.style.display = "flex";
+
+  startSlideshow();
 }
 
 function toggleMusic() {
