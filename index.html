@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 💕</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===== BASE ===== */
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffe6f0, #fff5fa);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Baloo 2', cursive;
+  overflow: hidden;
+}
+
+/* ===== CARD ===== */
+.screen {
+  background: white;
+  width: 80%;
+  max-width: 320px;
+  padding: 26px 22px 30px;
+  border-radius: 28px;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(255,182,193,0.45);
+  display: none;
+  overflow: hidden;
+}
+
+.screen.active { display: block; }
+
+/* ===== TEXT ===== */
+h1 {
+  color: #ff69b4;
+  margin: 14px 0 6px;
+  font-size: 26px;
+}
+p {
+  color: #777;
+  font-size: 14px;
+  margin: 0;
+}
+.no-anim {
+  opacity: 1 !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* ===== BUTTON ===== */
+button {
+  margin-top: 20px;
+  padding: 11px 26px;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #ff8acb, #ff6fb1);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* ===== DOODLES ===== */
+.doodle { font-size: 44px; margin-bottom: 10px; }
+
+/* ===== PHOTO ===== */
+.photo {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 22px;
+  border: 5px solid #ff9ccc;
+  margin: 12px auto 6px;
+  opacity: 0;
+  transform: translateY(-120px) scale(0.7);
+  animation: dropPop 1s cubic-bezier(.25,1.4,.5,1) forwards;
+  animation-delay: 0.3s;
+}
+@keyframes dropPop {
+  0% { opacity:0; transform:translateY(-120px) scale(0.7); }
+  70% { opacity:1; transform:translateY(10px) scale(1.05); }
+  100% { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ===== CAKE SCREEN ===== */
+.screen.cake-screen {
+  background: linear-gradient(135deg, #6fa8ff, #4d7cff);
+  min-height: 360px;
+  color: white;
+}
+
+.cake-wrapper {
+  position: relative;
+  overflow: visible;
+  margin-top: 70px;
+}
+
+.cake {
+  width: 200px;
+  height: 120px;
+  background: #ffb6d9;
+  border-radius: 0 0 18px 18px;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: inset 0 -10px 0 #ff9ccc;
+}
+.cake::before {
+  content:"";
+  position:absolute;
+  top:-20px;
+  left: 0;
+right: 0;
+  width:100%;
+  height:40px;
+  background:#ffd6e8;
+  border-radius:18px 18px 10px 10px;
+}
+
+.candles {
+  position:absolute;
+  top:-55px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:26px;
+}
+.candle {
+  width:10px;
+  height:34px;
+  background:white;
+  border-radius:5px;
+  position:relative;
+}
+.flame {
+  position:absolute;
+  top:-18px;
+  left:50%;
+  width:14px;
+  height:18px;
+  background:radial-gradient(circle,#ffd966 40%,#ff9933 70%);
+  border-radius:50%;
+  transform:translateX(-50%);
+  animation:flicker .15s infinite alternate;
+}
+@keyframes flicker {
+  from { transform:translateX(-50%) scale(1); opacity:1; }
+  to { transform:translateX(-50%) scale(.8); opacity:.85; }
+}
+
+/* Flame off */
+.flame.off {
+  animation: none;
+  opacity: 0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SCREEN 1 -->
+<div class="screen active" id="screen1">
+  <div class="doodle">🧸🎈</div>
+  <h1 class="no-anim">Hii 💕</h1>
+  <p class="no-anim">I made something for you</p>
+  <button onclick="goToBirthday()">Click here</button>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen" id="screen2">
+  <div class="doodle">🎉🎊</div>
+  <img src="images/him.jpg" class="photo">
+  <h1>Happy Birthday Inchu 💖</h1>
+  <p>You mean a lot to me</p>
+  <button onclick="goToCake()">That’s not it 👀</button>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen cake-screen" id="screen3">
+  <h1 class="no-anim">Make a wish ✨</h1>
+
+  <div class="cake-wrapper">
+    <div class="candles">
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+    </div>
+    <div class="cake"></div>
+  </div>
+
+  <p class="no-anim" id="statusText">Blow the candles 🎂</p>
+  <button onclick="startMic()">I’m ready 🎤</button>
+</div>
+
+<script>
+function goToBirthday() {
+  screen1.classList.remove("active");
+  screen2.classList.add("active");
+}
+function goToCake() {
+  screen2.classList.remove("active");
+  screen3.classList.add("active");
+}
+
+/* ===== MIC DETECTION ===== */
+let audioContext, analyser, mic;
+
+function startMic() {
+  document.getElementById("statusText").innerText = "Listening... blow now 💨";
+
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    mic = audioContext.createMediaStreamSource(stream);
+    mic.connect(analyser);
+
+    analyser.fftSize = 256;
+    const data = new Uint8Array(analyser.frequencyBinCount);
+
+    function detect() {
+      analyser.getByteFrequencyData(data);
+      let volume = data.reduce((a,b)=>a+b) / data.length;
+
+      if (volume > 40) { // threshold
+        blowOut();
+      } else {
+        requestAnimationFrame(detect);
+      }
+    }
+    detect();
+  });
+}
+
+function blowOut() {
+  document.querySelectorAll(".flame").forEach(f => f.classList.add("off"));
+  document.getElementById("statusText").innerText = "Yay! 🎉";
+}
+</script>
+
+</body>
+</html>
