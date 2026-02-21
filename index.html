@@ -170,6 +170,43 @@ button {
   margin-top: 18px;
   font-size: 18px;
 }
+/* ===== HEARTS (ONLY SCREEN 2) ===== */
+#screen2 {
+  position: relative;
+}
+
+.hearts {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heart {
+  position: absolute;
+  bottom: -20px;
+  font-size: 18px;
+  opacity: 0.8;
+  animation: floatHeart 4s linear forwards;
+}
+
+@keyframes floatHeart {
+  from {
+    transform: translateY(0) scale(0.8);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(-120%) scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* keep content above hearts */
+#screen2 > *:not(.hearts) {
+  position: relative;
+  z-index: 1;
+}
 </style>
 </head>
 
@@ -189,6 +226,7 @@ button {
 
 <!-- SCREEN 2 -->
 <div class="screen" id="screen2">
+  <div class="hearts"></div>
   <div class="doodle">🎉🎊</div>
   <img src="images/him.jpg" class="photo">
   <h1>Happy Birthday Inchu 💖</h1>
@@ -250,8 +288,10 @@ box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 function goToBirthday() {
   screen1.classList.remove("active");
   screen2.classList.add("active");
+  startHearts();
 }
 function goToCake() {
+  stopHearts();
   screen2.classList.remove("active");
   screen3.classList.add("active");
 }
@@ -350,6 +390,29 @@ function toggleMusic() {
     bgMusic.pause();
     musicBtn.innerText = "🔇";
   }
+}
+/* ===== HEARTS LOGIC (SCREEN 2 ONLY) ===== */
+let heartInterval;
+
+function startHearts() {
+  const container = document.querySelector("#screen2 .hearts");
+
+  heartInterval = setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "💗";
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.fontSize = (14 + Math.random() * 10) + "px";
+
+    container.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 4000);
+  }, 350);
+}
+
+function stopHearts() {
+  clearInterval(heartInterval);
+  document.querySelector("#screen2 .hearts").innerHTML = "";
 }
 </script>
 
