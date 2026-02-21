@@ -269,10 +269,58 @@ button {
 #finalScreen p {
   color: rgba(255,255,255,0.75);
 }
+  /* ===== FLOATING BACKGROUND PARTICLES ===== */
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, rgba(255,170,220,0.9), rgba(255,170,220,0));
+  border-radius: 50%;
+  animation: floatParticle linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes floatParticle {
+  from {
+    transform: translateY(110vh) scale(0.6);
+    opacity: 0;
+  }
+  20% { opacity: 0.8; }
+  to {
+    transform: translateY(-20vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Make sure cards stay above particles */
+.screen {
+  position: relative;
+  z-index: 1;
+}
+  /* ===== SCREEN TRANSITION ===== */
+.screen {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.screen.active {
+  opacity: 1;
+  transform: translateY(0);
+}
 </style>
 </head>
 
 <body>
+  <div class="particles"></div>
 
 <audio id="bgMusic" loop>
   <source src="music/birthday.mp3" type="audio/mpeg">
@@ -502,6 +550,18 @@ document.addEventListener("click", (e) => {
 
   setTimeout(() => emoji.remove(), 1200);
 });
+  /* ===== PARTICLE GENERATOR ===== */
+const particleContainer = document.querySelector(".particles");
+
+for (let i = 0; i < 30; i++) {
+  const p = document.createElement("div");
+  p.className = "particle";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (10 + Math.random() * 20) + "s";
+  p.style.animationDelay = Math.random() * 10 + "s";
+  particleContainer.appendChild(p);
+}
+  
 </script>
 
 </body>
