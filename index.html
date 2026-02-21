@@ -358,6 +358,65 @@ button {
   opacity: 1;
   transform: translateY(0);
 }
+/* ===== MEMORY GALLERY ===== */
+.gallery-scroll {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.gallery-item {
+  position: relative;
+  margin-bottom: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.gallery-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  filter: grayscale(100%) brightness(0.75);
+}
+
+.gallery-phrase {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 14px;
+  font-size: 14px;
+  color: #fff;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.65),
+    rgba(0,0,0,0.05)
+  );
+  font-style: italic;
+}
+/* ===== TAP TO COLOR REVEAL ===== */
+.gallery-item img {
+  transition: filter 0.8s ease, transform 0.6s ease;
+}
+
+.gallery-item.revealed img {
+  filter: grayscale(0%) brightness(1);
+  transform: scale(1.02);
+}
+
+.gallery-item.revealed {
+  box-shadow:
+    0 0 25px rgba(255,140,200,0.35),
+    inset 0 0 20px rgba(255,120,200,0.15);
+}
 </style>
 </head>
 
@@ -416,6 +475,49 @@ button {
   <p class="final-text">Thank you for being mine 💗</p>
   <p> with love your paathu 💓</p>
 </div>
+<!-- MEMORY GALLERY SCREEN -->
+<div class="screen" id="galleryScreen">
+  <h1>Our Little Memories 🤍</h1>
+
+  <div class="gallery-scroll">
+    <div class="gallery-item">
+      <img src="images/pic1.jpg">
+      <div class="gallery-phrase">Some moments quietly changed everything.</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/pic2.jpg">
+      <div class="gallery-phrase">You became comfort without trying.</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/pic3.jpg">
+      <div class="gallery-phrase">This smile still feels like home.</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/pic4.jpg">
+      <div class="gallery-phrase">Time slowed down here.</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/pic5.jpg">
+      <div class="gallery-phrase">Us — in the simplest way.</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/pic6.jpg">
+      <div class="gallery-phrase">I’d choose this memory again.</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/pic7.jpg">
+      <div class="gallery-phrase">Still you. Still my favorite.</div>
+    </div>
+  </div>
+
+  <button onclick="closeGallery()">Back 💕</button>
+</div>
 
 <!-- MUSIC BUTTON (HIDDEN INITIALLY) -->
 <button id="musicBtn" onclick="toggleMusic()"
@@ -437,6 +539,26 @@ gap: 6px;
 box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 ">
 🔊 Tap for music
+</button>
+<!-- GALLERY BUTTON -->
+<button id="galleryBtn" onclick="openGallery()"
+style="
+position: fixed;
+top: 16px;
+left: 16px;
+z-index: 999;
+background: rgba(255,255,255,0.12);
+color: #fff;
+border: 1px solid rgba(255,255,255,0.25);
+border-radius: 22px;
+padding: 8px 14px;
+font-size: 13px;
+font-family: 'Baloo 2', cursive;
+backdrop-filter: blur(8px);
+display: none;
+box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+">
+🤍 Memories
 </button>
 
 <script>
@@ -617,6 +739,45 @@ for (let i = 0; i < 28; i++) {
   h.style.animationDelay = Math.random() * 10 + "s";
   particleContainer.appendChild(h);
 }
+function openGallery() {
+  switchScreen(finalScreen, galleryScreen);
+}
+
+function closeGallery() {
+  switchScreen(galleryScreen, finalScreen);
+}
+
+/* Show gallery button only on final screen */
+const observerFinal = new MutationObserver(() => {
+  if (finalScreen.classList.contains("active")) {
+    galleryBtn.style.display = "flex";
+  } else {
+    galleryBtn.style.display = "none";
+  }
+});
+observerFinal.observe(finalScreen, { attributes: true });
+
+/* Fade-in on scroll */
+const galleryObserver = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  },
+  { threshold: 0.2 }
+);
+
+document.querySelectorAll(".gallery-item").forEach(item => {
+  galleryObserver.observe(item);
+});
+/* ===== TAP TO COLOR REVEAL LOGIC ===== */
+document.querySelectorAll(".gallery-item").forEach(item => {
+  item.addEventListener("click", () => {
+    item.classList.toggle("revealed");
+  });
+});
 </script>
 
 </body>
