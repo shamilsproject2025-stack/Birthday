@@ -301,9 +301,11 @@ function goToCake() {
 
 /* ===== MIC ===== */
 let audioContext, analyser, mic, micStream;
+  let micActive = false;
 
 function startMic() {
   statusText.innerText = "Listening... blow into mic now 💨";
+  micActive = true;
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
     micStream = stream;
@@ -316,6 +318,7 @@ function startMic() {
     const data = new Uint8Array(analyser.frequencyBinCount);
 
     function detect() {
+      if (!micActive) return;
       analyser.getByteFrequencyData(data);
       let volume = data.reduce((a,b)=>a+b) / data.length;
       if (volume > 40) blowOut();
