@@ -32,7 +32,6 @@ body {
   display: none;
   overflow: hidden;
 }
-
 .screen.active { display: block; }
 
 /* ===== TEXT ===== */
@@ -95,7 +94,6 @@ button {
 
 .cake-wrapper {
   position: relative;
-  overflow: visible;
   margin-top: 70px;
 }
 
@@ -113,8 +111,7 @@ button {
   position:absolute;
   top:-20px;
   left: 0;
-right: 0;
-  width:100%;
+  right: 0;
   height:40px;
   background:#ffd6e8;
   border-radius:18px 18px 10px 10px;
@@ -150,34 +147,23 @@ right: 0;
   from { transform:translateX(-50%) scale(1); opacity:1; }
   to { transform:translateX(-50%) scale(.8); opacity:.85; }
 }
+.flame.off { animation:none; opacity:0; }
 
-/* Flame off */
-.flame.off {
-  animation: none;
-  opacity: 0;
-}
-/* ===== Slideshow ===== */
+/* ===== SLIDESHOW (FIXED) ===== */
 .slideshow {
   width: 240px;
   height: 320px;
   margin: 20px auto;
-  position: relative;
-  overflow: hidden;
   border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
   box-shadow: 0 12px 30px rgba(0,0,0,0.2);
 }
-
-.slide {
-  position: absolute;
+.slideshow img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-
-.slide.active {
-  opacity: 1;
+  transition: opacity 0.8s ease;
 }
 
 .final-text {
@@ -222,20 +208,18 @@ right: 0;
   <p class="no-anim" id="statusText">Blow the candles 🎂</p>
   <button onclick="startMic()">I’m ready 🎤</button>
 </div>
-<!-- FINAL SURPRISE SCREEN -->
-<div class="screen" id="finalScreen" style="display:none;">
+
+<!-- FINAL SCREEN -->
+<div class="screen" id="finalScreen">
   <h1>You made it 💖</h1>
 
   <div class="slideshow">
-    <img src="images/pic1.jpg" class="slide active">
-    <img src="images/pic2.jpg" class="slide">
-    <img src="images/pic3.jpg" class="slide">
-    <img src="images/pic4.jpg" class="slide">
-    <img src="images/pic5.jpg" class="slide">
+    <img id="slideImage" src="images/pic1.jpg">
   </div>
 
   <p class="final-text">Thank you for being mine 💗</p>
 </div>
+
 <script>
 function goToBirthday() {
   screen1.classList.remove("active");
@@ -246,30 +230,26 @@ function goToCake() {
   screen3.classList.add("active");
 }
 
-/* ===== MIC DETECTION ===== */
+/* ===== MIC ===== */
 let audioContext, analyser, mic;
 
 function startMic() {
-  document.getElementById("statusText").innerText = "Listening... blow now 💨";
+  statusText.innerText = "Listening... blow now 💨";
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioContext = new AudioContext();
     analyser = audioContext.createAnalyser();
     mic = audioContext.createMediaStreamSource(stream);
     mic.connect(analyser);
-
     analyser.fftSize = 256;
+
     const data = new Uint8Array(analyser.frequencyBinCount);
 
     function detect() {
       analyser.getByteFrequencyData(data);
       let volume = data.reduce((a,b)=>a+b) / data.length;
-
-      if (volume > 40) { // threshold
-        blowOut();
-      } else {
-        requestAnimationFrame(detect);
-      }
+      if (volume > 40) blowOut();
+      else requestAnimationFrame(detect);
     }
     detect();
   });
@@ -277,26 +257,35 @@ function startMic() {
 
 function blowOut() {
   document.querySelectorAll(".flame").forEach(f => f.classList.add("off"));
-  document.getElementById("statusText").innerText = "Yay! 🎉";
+  statusText.innerText = "Yay! 🎉";
   setTimeout(showFinalSurprise, 1500);
 }
-// ===== SLIDESHOW LOGIC =====
-let slides;
-let currentSlide = 0;
+
+/* ===== SLIDESHOW LOGIC ===== */
+const images = [
+  "images/pic1.jpg",
+  "images/pic2.jpg",
+  "images/pic3.jpg",
+  "images/pic4.jpg",
+  "images/pic5.jpg"
+];
+let current = 0;
 
 function startSlideshow() {
-  slides = document.querySelectorAll(".slide");
-
+  const img = document.getElementById("slideImage");
   setInterval(() => {
-    slides[currentSlide].classList.remove("active");
-    currentSlide = (currentSlide + 1) % slides.length;
-    slides[currentSlide].classList.add("active");
+    img.style.opacity = 0;
+    setTimeout(() => {
+      current = (current + 1) % images.length;
+      img.src = images[current];
+      img.style.opacity = 1;
+    }, 400);
   }, 2500);
 }
 
 function showFinalSurprise() {
-  document.getElementById("screen3").classList.remove("active");
-  document.getElementById("finalScreen").style.display = "block";
+  screen3.classList.remove("active");
+  finalScreen.classList.add("active");
   startSlideshow();
 }
 </script>
