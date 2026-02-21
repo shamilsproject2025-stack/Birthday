@@ -231,6 +231,7 @@ button {
   <img src="images/him.jpg" class="photo">
   <h1>Happy Birthday Inchu 💖</h1>
   <p>You mean a lot to me</p>
+  <p>Click here 👇🏻</p>
   <button onclick="goToCake()">That’s not it 👀</button>
 </div>
 
@@ -248,6 +249,7 @@ button {
   </div>
 
   <p class="no-anim" id="statusText">Blow the candles 🎂</p>
+  <p>Click here 👇🏻</p>
   <button onclick="startMic()">I’m ready 🎤</button>
 </div>
 
@@ -260,6 +262,7 @@ button {
   </div>
 
   <p class="final-text">Thank you for being mine 💗</p>
+  <p> with love your paathu 💓</p>
 </div>
 
 <!-- MUSIC BUTTON (HIDDEN INITIALLY) -->
@@ -300,7 +303,7 @@ function goToCake() {
 let audioContext, analyser, mic, micStream;
 
 function startMic() {
-  statusText.innerText = "Listening... blow now 💨";
+  statusText.innerText = "Listening... blow into mic now 💨";
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
     micStream = stream;
